@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPC Pre-Enrollment Form – Variation 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0d0f;
+            --surface: #131318;
+            --surface2: #1a1a22;
+            --border: #2a2a38;
+            --primary: #4f8ef7;
+            --primary-dim: rgba(79,142,247,0.12);
+            --accent: #f7c04f;
+            --accent-dim: rgba(247,192,79,0.12);
+            --text: #e8e8f0;
+            --muted: #6e6e8a;
+            --danger: #ff5c72;
+            --success: #3dca7e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 20px 80px;
+        }
+
+        /* Ambient glow background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(79,142,247,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            padding: 60px 0 50px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 48px;
+            position: relative;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .school-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid var(--primary);
+            padding: 5px 12px;
+            border-radius: 2px;
+        }
+        .year-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 1.5px;
+        }
+        .header h1 {
+            font-size: 56px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            line-height: 1;
+            color: var(--text);
+        }
+        .header h1 span {
+            color: var(--primary);
+            position: relative;
+        }
+        .header h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+        .header-sub {
+            font-size: 14px;
+            color: var(--muted);
+            margin-top: 16px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        /* Alert */
+        .alert {
+            background: rgba(247,192,79,0.06);
+            border: 1px solid rgba(247,192,79,0.3);
+            border-left: 3px solid var(--accent);
+            padding: 14px 18px;
+            margin-bottom: 40px;
+            font-size: 13px;
+            color: #c9a03e;
+            font-family: 'Space Mono', monospace;
+            line-height: 1.6;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Sections */
+        .section-block {
+            margin-bottom: 40px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.3px;
+        }
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* Form grid */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .full { grid-column: 1 / -1; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+        label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        label .req { color: var(--danger); }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 11px 14px;
+            font-size: 14px;
+            font-family: 'Syne', sans-serif;
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            appearance: none;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79,142,247,0.15);
+        }
+        input::placeholder { color: var(--muted); font-size: 13px; }
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236e6e8a' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+        }
+
+        /* Table */
+        .table-wrap { overflow-x: auto; border-radius: 6px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; }
+        thead tr { background: var(--surface2); }
+        th {
+            padding: 12px 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--primary);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            font-size: 14px;
+        }
+        tr:last-child td { border-bottom: none; }
+        tbody tr:hover td { background: rgba(255,255,255,0.02); }
+        td:first-child { color: var(--muted); font-size: 13px; }
+        td input[type="text"] {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            border-radius: 0;
+            padding: 6px 4px;
+            width: 100%;
+            color: var(--text);
+            font-size: 13px;
+            font-family: 'Syne', sans-serif;
+        }
+        td input[type="text"]:focus {
+            border-bottom-color: var(--primary);
+            outline: none;
+            box-shadow: none;
+        }
+
+        /* Checkboxes */
+        .check-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 8px;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .check-item:hover { border-color: var(--primary); background: var(--primary-dim); }
+        .check-item label {
+            text-transform: none;
+            letter-spacing: 0;
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 400;
+        }
+        input[type="checkbox"], input[type="radio"] {
+            width: 16px; height: 16px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* Radio groups */
+        .radio-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
+        .radio-opt {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .radio-opt label {
+            font-family: 'Syne', sans-serif;
+            text-transform: none;
+            letter-spacing: 0;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        /* Info needed */
+        .info-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label {
+            font-size: 13px;
+            color: var(--text);
+            min-width: 250px;
+            flex: 1;
+            font-weight: 500;
+        }
+        .info-opts { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .info-opts input[type="text"] {
+            padding: 6px 10px;
+            font-size: 12px;
+            width: 130px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+        }
+        .info-opts span { font-size: 12px; color: var(--muted); }
+
+        /* Status area */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 32px;
+            align-items: start;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px 24px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        /* Certification */
+        .cert-panel {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 30px;
+            margin-bottom: 32px;
+        }
+        .cert-panel p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 36px;
+            max-width: 600px;
+        }
+        .sig-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .sig-item { text-align: center; }
+        .sig-line {
+            border-bottom: 1px solid var(--border);
+            margin: 50px 0 10px;
+        }
+        .sig-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-start;
+            padding-top: 8px;
+        }
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:hover { background: #3a7ae6; box-shadow: 0 0 24px rgba(79,142,247,0.35); }
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-outline:hover { border-color: var(--text); }
+        .btn-ghost {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid transparent;
+        }
+        .btn-ghost:hover { color: var(--danger); }
+
+        .footer-credit {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 640px) {
+            .header h1 { font-size: 36px; }
+            .form-row { grid-template-columns: 1fr; }
+            .sig-grid { grid-template-columns: 1fr; }
+            .meta-grid { grid-template-columns: 1fr; }
+            .btn-row { flex-direction: column; }
+            .btn { text-align: center; }
+        }
+        @media print {
+            body { background: white; color: black; }
+            .btn-row { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <div class="header-top">
+                <div class="school-tag">MPC · Mallig Polytechnic College</div>
+                <div class="year-tag">AY 2024–2025</div>
+            </div>
+            <h1>Pre-<span>Enrollment</span><br>Form</h1>
+            <div class="header-sub">Complete all required sections before submission. Fields marked * are mandatory.</div>
+        </div>
+
+        <div class="alert">
+            ⚠ NOTICE — This form does not guarantee enrollment. All data must be accurate and complete. False information may result in disqualification.
+        </div>
+
+        <form id="enrollmentForm">
+            <!-- 1. Personal Information -->
+            <div class="section-block">
+                <div class="section-header">
+                    <div class="section-num">01</div>
+                    <div class="section-title">Personal Information</div>
+                    <div class="section-line"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Last Name <span class="req">*</span></label>
+                        <input type="text" name="lastName" placeholder="Surname" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Given Name <span class="req">*</span></label>
+                        <input type="text" name="givenName" placeholder="First name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Middle Name <span class="req">*</span></label>
+                        <input type="text" name="middleName" placeholder="Middle name" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>LRN (New)</label>
+                        <input type="text" name="lrnNew" placeholder="Learner Ref. No.">
+                    </div>
+                    <div class="form-group">
+                        <label>ID No. (Old)</label>
+                        <input type="text" name="idOld">
+                    </div>
+                    <div class="form-group">
+                        <label>Course & Year <span class="req">*</span></label>
+                        <input type="text" name="courseYear" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Major</label>
+                        <input type="text" name="major">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Semester <span class="req">*</span></label>
+                        <select name="semester" required>
+                            <option value="">Select</option>
+                            <option>1st Semester</option>
+                            <option>2nd Semester</option>
+                            <option>Summer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Academic Year <span class="req">*</span></label>
+                        <input type="text" name="academicYear" placeholder="2024-2025" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sex <span class="req">*</span></label>
+                        <select name="sex" required>
+                            <option value="">—</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Civil Status <span class="req">*</span></label>
+                        <select name="civilStatus" required>
+                            <option value="">—</option>
+                            <option>Single</option>
+                            <option>Married</option>
+                            <option>Widowed</option>
+                            <option>Separated</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nationality <span class="req">*</span></label>
+                        <input type="text" name="nationality" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Birthplace <span class="req">*</span></label>
+                        <input type="text" name="birthplace" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Birthdate <span class="req">*</span></label>
+                        <input type="date" name="birthdate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Number <span class="req">*</span></label>
+                        <input type="tel" name="contactNumber" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label>Permanent Address <span class="req">*</span></label>
+                        <input type="text" name="permanentAddress" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label>Email Address <span class="req">*</span></label>
+                        <input type="email" name="email" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Family Information -->
+            <div class="section-block">
+                <div class="section-header">
+                    <div class="section-num">02</div>
+                    <div class="section-title">Family Information</div>
+                    <div class="section-line"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Father's Full Name <span class="req">*</span></label>
+                        <input type="text" name="fatherName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Occupation <span class="req">*</span></label>
+                        <input type="text" name="fatherOccupation" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Mother's Full Name <span class="req">*</span></label>
+                        <input type="text" name="motherName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Occupation <span class="req">*</span></label>
+                        <input type="text" name="motherOccupation" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Spouse Name (if married)</label>
+                        <input type="text" name="spouseName">
+                    </div>
+                    <div class="form-group">
+                        <label>Spouse Occupation</label>
+                        <input type="text" name="spouseOccupation">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label>Guardian / Landlord (if transient in Mallig)</label>
+                        <input type="text" name="guardianName">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label>Guardian Address</label>
+                        <input type="text" name="guardianAddress">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Educational Attainment -->
+            <div class="section-block">
+                <div class="section-header">
+                    <div class="section-num">03</div>
+                    <div class="section-title">Educational Attainment</div>
+                    <div class="section-line"></div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:22%">Level</th>
+                                <th style="width:36%">Name of School</th>
+                                <th style="width:20%">School Year</th>
+                                <th style="width:22%">Honors Received</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Elementary</td><td><input type="text" name="elemSchool"></td><td><input type="text" name="elemYear"></td><td><input type="text" name="elemHonors"></td></tr>
+                            <tr><td>Junior High School</td><td><input type="text" name="jhsSchool"></td><td><input type="text" name="jhsYear"></td><td><input type="text" name="jhsHonors"></td></tr>
+                            <tr><td>Senior High School</td><td><input type="text" name="shsSchool"></td><td><input type="text" name="shsYear"></td><td><input type="text" name="shsHonors"></td></tr>
+                            <tr><td>College</td><td><input type="text" name="collegeSchool"></td><td><input type="text" name="collegeYear"></td><td><input type="text" name="collegeHonors"></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 4. Admission Requirements -->
+            <div class="section-block">
+                <div class="section-header">
+                    <div class="section-num">04</div>
+                    <div class="section-title">Admission Requirements</div>
+                    <div class="section-line"></div>
+                </div>
+                <div class="check-grid" style="margin-bottom:24px;">
+                    <div class="check-item"><input type="checkbox" id="v2_form138" name="req_form138"><label for="v2_form138">Form 138</label></div>
+                    <div class="check-item"><input type="checkbox" id="v2_grmc" name="req_grmc"><label for="v2_grmc">GRMC</label></div>
+                    <div class="check-item"><input type="checkbox" id="v2_ncae" name="req_ncae"><label for="v2_ncae">NCAE Result</label></div>
+                    <div class="check-item"><input type="checkbox" id="v2_barangay" name="req_barangay"><label for="v2_barangay">Barangay Certificate of Residency</label></div>
+                    <div class="check-item"><input type="checkbox" id="v2_psa" name="req_psa"><label for="v2_psa">Photocopy of PSA Birth Certificate</label></div>
+                    <div class="check-item"><input type="checkbox" id="v2_photo2x2" name="req_photo2x2"><label for="v2_photo2x2">2 pcs 2" × 2" Photo</label></div>
+                    <div class="check-item"><input type="checkbox" id="v2_photo1x1" name="req_photo1x1"><label for="v2_photo1x1">2 pcs 1" × 1" Photo ID</label></div>
+                    <div class="check-item"><input type="checkbox" id="v2_envelope" name="req_envelope"><label for="v2_envelope">1 Long Brown Envelope</label></div>
+                </div>
+                <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:20px 24px;">
+                    <div class="form-group">
+                        <label>Registration Date</label>
+                        <input type="date" name="registrationDate" style="max-width:200px;">
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:8px;">Student Status</label>
+                        <div class="radio-row">
+                            <div class="radio-opt"><input type="radio" id="v2_old" name="studentStatus" value="old"><label for="v2_old">Old</label></div>
+                            <div class="radio-opt"><input type="radio" id="v2_new" name="studentStatus" value="new"><label for="v2_new">New</label></div>
+                            <div class="radio-opt"><input type="radio" id="v2_transferee" name="studentStatus" value="transferee"><label for="v2_transferee">Transferee</label></div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex:1;min-width:180px;">
+                        <label>Enrolled By</label>
+                        <input type="text" name="enrolledBy">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. CHEDRO2 Info -->
+            <div class="section-block">
+                <div class="section-header">
+                    <div class="section-num">05</div>
+                    <div class="section-title">CHEDRO2 Enrollment Information</div>
+                    <div class="section-line"></div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">First Generation Student — Father</span>
+                    <div class="info-opts">
+                        <div class="radio-opt"><input type="radio" id="v2_fatherYes" name="fatherFirstGen" value="yes"><label for="v2_fatherYes">Yes</label></div>
+                        <div class="radio-opt"><input type="radio" id="v2_fatherNo" name="fatherFirstGen" value="no"><label for="v2_fatherNo">No</label></div>
+                    </div>
+                    <span class="info-label" style="min-width:auto;font-weight:400;color:var(--muted);">Mother</span>
+                    <div class="info-opts">
+                        <div class="radio-opt"><input type="radio" id="v2_motherYes" name="motherFirstGen" value="yes"><label for="v2_motherYes">Yes</label></div>
+                        <div class="radio-opt"><input type="radio" id="v2_motherNo" name="motherFirstGen" value="no"><label for="v2_motherNo">No</label></div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Indigenous People (IP) Communities</span>
+                    <div class="info-opts">
+                        <div class="radio-opt"><input type="radio" id="v2_ipYes" name="indigenousPeople" value="yes"><label for="v2_ipYes">Yes</label></div>
+                        <div class="radio-opt"><input type="radio" id="v2_ipNo" name="indigenousPeople" value="no"><label for="v2_ipNo">No</label></div>
+                        <span>IP Group:</span>
+                        <input type="text" name="ipGroup">
+                    </div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Person with Disabilities (PWD)</span>
+                    <div class="info-opts">
+                        <div class="radio-opt"><input type="radio" id="v2_pwdYes" name="pwd" value="yes"><label for="v2_pwdYes">Yes</label></div>
+                        <div class="radio-opt"><input type="radio" id="v2_pwdNo" name="pwd" value="no"><label for="v2_pwdNo">No</label></div>
+                        <span>Description:</span>
+                        <input type="text" name="pwdDescription">
+                    </div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Low-Income Household (Urban/Rural Poor)</span>
+                    <div class="info-opts">
+                        <div class="radio-opt"><input type="radio" id="v2_liYes" name="lowIncome" value="yes"><label for="v2_liYes">Yes</label></div>
+                        <div class="radio-opt"><input type="radio" id="v2_liNo" name="lowIncome" value="no"><label for="v2_liNo">No</label></div>
+                        <span>Monthly Income:</span>
+                        <input type="text" name="monthlyIncome" style="width:110px;">
+                    </div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Dependent of Solo Parent</span>
+                    <div class="info-opts">
+                        <div class="radio-opt"><input type="radio" id="v2_depYes" name="dependentSolo" value="yes"><label for="v2_depYes">Yes</label></div>
+                        <div class="radio-opt"><input type="radio" id="v2_depNo" name="dependentSolo" value="no"><label for="v2_depNo">No</label></div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Solo Parent</span>
+                    <div class="info-opts">
+                        <div class="radio-opt"><input type="radio" id="v2_spYes" name="soloParent" value="yes"><label for="v2_spYes">Yes</label></div>
+                        <div class="radio-opt"><input type="radio" id="v2_spNo" name="soloParent" value="no"><label for="v2_spNo">No</label></div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Farmer and Fisherfolk Households</span>
+                    <div class="info-opts">
+                        <div class="radio-opt"><input type="radio" id="v2_ffYes" name="farmerFisher" value="yes"><label for="v2_ffYes">Yes</label></div>
+                        <div class="radio-opt"><input type="radio" id="v2_ffNo" name="farmerFisher" value="no"><label for="v2_ffNo">No</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certification -->
+            <div class="cert-panel">
+                <p>I hereby certify that all information provided in this form is true and correct to the best of my knowledge. I understand that any misrepresentation may result in disqualification from enrollment.</p>
+                <div class="sig-grid">
+                    <div class="sig-item">
+                        <div class="sig-line"></div>
+                        <div class="sig-label">Student Signature</div>
+                    </div>
+                    <div class="sig-item">
+                        <div class="sig-line"></div>
+                        <div class="sig-label">Parent / Guardian</div>
+                    </div>
+                    <div class="sig-item">
+                        <div class="sig-line"></div>
+                        <div class="sig-label">Registrar</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="submit" class="btn btn-primary">Submit Form</button>
+                <button type="button" class="btn btn-outline" onclick="window.print()">Print Form</button>
+                <button type="reset" class="btn btn-ghost">Clear All</button>
+            </div>
+        </form>
+
+        <div class="footer-credit">Developed by Jhon Joy Simon · 09558210277</div>
+    </div>
+</body>
+</html>
